@@ -18,9 +18,11 @@ class AverageRatingReport(BaseReport):
                 brand_ratings[brand] = [rating]
 
         # Считаем среднюю оценку для каждого бренда
-        average_brand_rating: list[tuple] = []
-        for brand, rating in brand_ratings.items():
-            average_brand_rating += (brand, sum(rating))
+        average_brand_rating: list[tuple] = [('', 'brand', 'rating')]
+        for idx, brand_statistic in enumerate(brand_ratings.items()):
+            brand, votes = brand_statistic
+            rating = sum(votes) / len(votes)
+            average_brand_rating.append((idx+1, brand, rating,))
         return average_brand_rating
 
 Report = AverageRatingReport

@@ -5,6 +5,8 @@ import os
 import sys
 import csv
 
+from tabulate import tabulate
+
 
 def build_report_by_name(report_name: str):
     report_path = os.path.join("reports", f"{report_name}.py")
@@ -64,8 +66,10 @@ def main():
     args = parser.parse_args()
 
     records = merge_csv(args.files)
-    Report = build_report_by_name(args.report)(records)
-    print(Report.build())
+    Reporter = build_report_by_name(args.report)(records)
+
+    report = Reporter.build()
+    print(tabulate(report, headers="firstrow"))
 
 
 if __name__ == "__main__":
