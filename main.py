@@ -6,7 +6,7 @@ import sys
 import csv
 
 
-def load_report_processor(report_name: str):
+def build_report_by_name(report_name: str):
     report_path = os.path.join("reports", f"{report_name}.py")
 
     if not os.path.isfile(report_path):
@@ -17,11 +17,7 @@ def load_report_processor(report_name: str):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
 
-    if not hasattr(module, "run_processor"):
-        print(f"Ошибка: файл отчёта должен содержать функцию run_processor(files)")
-        sys.exit(1)
-
-    return module.run_processor
+    return module.Report
 
 
 def merge_csv(file_paths: list) -> list[tuple]:
@@ -68,9 +64,8 @@ def main():
     args = parser.parse_args()
 
     records = merge_csv(args.files)
-    report_processor = load_report_processor(args.report)
-    # print(records)
-    print(report_processor(records))
+    Report = build_report_by_name(args.report)(records)
+    print(Report.build())
 
 
 if __name__ == "__main__":
