@@ -6,21 +6,22 @@ class ValidationError(Exception):
 
 class BaseReport:
     """Базовый класс для создания репортов. Приводит ячейки таблиц к типам, заданным в схеме."""
-    __table_schema__ = None
+    __name__ = 'base_report'
+    __report_schema__ = None
 
     def __init__(self, table: list[tuple]) -> list[tuple]:
-        self.table = self._pre_processor(table)
+        if not self.__report_schema__:
+            raise ValidationError(f'Необходимо задать схему данных для репорта в {self.__name__}!')
+        self.table = self._read_by_report_schema(table)
 
-    def _pre_processor(self, table: list[tuple]) -> list[tuple]:
-        if not self.__table_schema__:
-            return table
+    def _read_by_report_schema(self, table: list[tuple]) -> list[tuple]:
+        """Прочитай табличку по схеме репорта, заданного внутри класса."""
+        header_schema = tuple((name for name, _ in self.__report_schema__))
+        body_schema = tuple((_type for _, _type in self.__report_schema__))
 
-        header_schema = tuple((name for name, _ in self.__table_schema__))
-        body_schema = tuple((_type for _, _type in self.__table_schema__))
-
-        head, body = (table[0], table[1:])
+        head, body = table[0], table[1:]
         if head != header_schema:
-            raise ValidationError(f'Невалидный заголовок {head}, ожидается {header_schema}')
+            raise ValidationError(f'Получены заголовки репорта: "{head}", ожидаю: "{header_schema}"')
 
         normalized = []
         for record in body:
