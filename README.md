@@ -27,10 +27,19 @@ python main.py --files example/products1.csv example/products2.csv --report aver
 
 Где:
 --files принимает список путей к CSV файлам
---report указывает модуль репорта в директории reports/ без .py
+--report указывает модуль репорта в директории reports/
 
 #### Пример входных CSV файлов
 Файлы c примерами лежат в example/products1.csv и example/products2.csv
+
+```csv
+name,brand,price,rating
+iphone 15 pro,apple,999,4.9
+galaxy s23 ultra,samsung,1199,4.8
+redmi note 12,xiaomi,199,4.6
+iphone 14,apple,799,4.7
+galaxy a54,samsung,349,4.2
+```
 
 ### Правила создания нового репорта
 1. Создать новый файл в директории reports/, например:
