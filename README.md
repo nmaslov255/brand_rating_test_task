@@ -44,7 +44,7 @@ galaxy a54,samsung,349,4.2
 ### Правила создания нового репорта
 1. Создать новый файл в директории reports/, например:
 ```Bash
-reports/my_new_report.py
+reports/top_rating_report.py
 ```
 
 2. Импортировать BaseReport:
@@ -52,21 +52,19 @@ reports/my_new_report.py
 from reports.base import BaseReport
 ```
 
-3. Определить имя репорта и схему таблицы в свойстве `__report_schema__`:
+3. Определить имя репорта и схему таблицы`:
 ```Python
-class MyNewReport(BaseReport):
-    __name__ = 'my_new_report'
-    __report_schema__ = [
-        ("brand", str),
-        ("rating", float),
-    ]
+class TopRatingReport(BaseReport):
+    __name__ = 'top_rating_report'
+    # В этом примере не будем задавать __report_schema__
 ```
 
 4. Перегрузить метод `self.calculate`:
 ```Python
-class MyNewReport(BaseReport):
-    ...  # Имя репорта и схема таблицы
+class TopRatingReport(BaseReport):
+    ...  # Имя репорта и схема
     def calculate(self) -> list[tuple]:
+        """Возвращает табличку с самым высоко оцененным брендом."""
         top_brand, top_rating = None, None
         for brand, rating in self.table[1:]:
             if not top_brand:
@@ -78,14 +76,14 @@ class MyNewReport(BaseReport):
 
 5. Определить публичный класс Report в конце файла:
 ```Python
-Report = MyNewReport
+Report = TopRatingReport
 
 __all__ = ["Report"]
 ```
 
-Теперь репорт можно запускать:
+Теперь `top-rating-report` репорт можно запустить:
 ```Bash
-python main.py --files example/products1.csv example/products2.csv --report my-new-report
+python main.py --files example/products1.csv example/products2.csv --report top-rating-report
 ```
 
 ## Тестирование

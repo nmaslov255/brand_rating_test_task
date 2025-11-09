@@ -30,12 +30,3 @@ def test_base_report_invalid_header():
     ]
     with pytest.raises(ValidationError):
         DummyReport(table)
-
-
-def test_base_report_invalid_schema():
-    class InvalidSchemaReport(BaseReport):
-        pass
-
-    table = [("a", "b"), ("1", "2")]
-    with pytest.raises(ValidationError):
-        InvalidSchemaReport(table)

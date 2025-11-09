@@ -2,7 +2,7 @@ import os
 import pytest
 from tempfile import NamedTemporaryFile
 
-from helpers import merge_csv
+from brand_rating_test_task.helpers import merge_csv
 from reports.base import ValidationError
 
 

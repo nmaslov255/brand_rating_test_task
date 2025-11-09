@@ -17,18 +17,19 @@ class BaseReport:
     __report_schema__: List[Tuple[str, Type]] = None
 
     def __init__(self, table: List[tuple]):
-        """Перед иницилизацией обязательно задаем схему рабочей таблицы.
+        """Перед иницилизацией можно задать схему рабочей таблицы.
 
         Формат схемы - список кортежей, где первое значение - имя колонки, а
         второе - функция приведения типа, пример:
 
         `__report_schema__ = [('name': str), ('price', int), ...]`
+
+        Если схема не задана, работаем с таблицей "как есть".
         """
-        if not self.__report_schema__:
-            raise ValidationError(
-                f"Необходимо задать схему данных для репорта в {self.__name__}"
-            )
-        self.table = self._apply_schema(table)
+        if self.__report_schema__:
+            self.table = self._apply_schema(table)
+        else:
+            self.table = table
 
     def _apply_schema(self, table: List[tuple]) -> List[tuple]:
         """Приводит таблицу к типам, заданным в __report_schema__."""
